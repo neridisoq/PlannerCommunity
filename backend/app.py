@@ -20,13 +20,13 @@ kakao_api = KakaoAPI()
 # 사용자를 카카오 인증 URL로 리다이렉트
 @app.get("/getcode")
 def get_kakao_code(request: Request):
-    scope = 'profile_nickname, profile_image'  # 요청할 권한 범위
+    scope = 'profile_nickname, profile_image, account_email'  # 요청할 권한 범위
     kakao_auth_url = kakao_api.getcode_auth_url(scope)
     return RedirectResponse(kakao_auth_url)
 
 # 카카오 로그인 후 카카오에서 리디렉션될 엔드포인트
 # 카카오에서 제공한 인증 코드를 사용하여 액세스 토큰을 요청
-@app.get("/callback")
+@app.get("/oauth")
 async def kakao_callback(request: Request, code: str):
     token_info = await kakao_api.get_token(code)
     if "access_token" in token_info:
